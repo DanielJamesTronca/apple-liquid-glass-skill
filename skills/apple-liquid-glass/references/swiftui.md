@@ -18,10 +18,13 @@ JSON; availability strings are Apple's, not inferred.
 | `PrimitiveButtonStyle.glassProminent` | iOS/iPadOS/Catalyst/macOS/tvOS/watchOS 26.0 | `GlassProminentButtonStyle` |
 | `ConcentricRectangle` | All Apple platforms 26.0, including visionOS | Squared, rounded, and container-concentric corners |
 | `backgroundExtensionEffect()` | All Apple platforms 26.0, including visionOS | Mirrors and blurs the view into adjacent safe area |
+| `safeAreaBar(edge:alignment:spacing:content:)` | All Apple platforms 26.0, including visionOS | Places custom edge chrome and extends affected scroll-edge effects |
 | `ToolbarContent.sharedBackgroundVisibility(_:)` | iOS/iPadOS/Catalyst/macOS 26.0 | `.hidden` drops the shared glass background for an item |
 | `tabBarMinimizeBehavior(_:)` | 26.0 (all platforms) | Still current; not renamed |
 | `ToolbarContent.visibilityPriority(_:)` | iOS/iPadOS/Catalyst/tvOS/watchOS/visionOS **27.0 beta**; macOS 26.1 | `ToolbarItemVisibilityPriority` |
 | `toolbarMinimizationBehavior(_:for:)` | **27.0 beta** (all platforms) | Supersedes the OS 26 toolbar spelling; see migration file |
+| `toolbarMinimizationRestoration(_:for:)` | **27.0 beta** (all platforms) | Controls how a minimized toolbar restores |
+| `toolbarMinimizationSafeAreaAdjustment(_:for:)` | **27.0 beta** (all platforms) | Controls whether safe areas update during minimization |
 | `ToolbarOverflowMenu` | **27.0 beta** iOS/iPadOS/Catalyst/visionOS | **No macOS, watchOS, tvOS.** Also `View.toolbarOverflowMenu(content:)` |
 | `ToolbarItemPlacement.topBarPinnedTrailing` | **27.0 beta** iOS/iPadOS/Catalyst/visionOS | **No macOS.** Pins an item to the trailing edge |
 
@@ -68,6 +71,31 @@ Image(systemName: "location.fill")
 Padding after `glassEffect` moves the element; padding before it enlarges the
 glass. Putting `.frame` after the effect is the usual cause of "my glass is the
 wrong size."
+
+## Custom safe-area bars
+
+Prefer a standard toolbar or tab bar first. When the app genuinely needs custom
+fixed chrome at an edge, use `safeAreaBar` instead of pinning a glass view with
+an overlay or `VStack`. It updates the safe area and continues the scroll-edge
+effect behind the bar. It does not justify applying one large `glassEffect` to
+the whole bar; style the actual controls appropriately.
+
+```swift
+content
+    .safeAreaBar(edge: .bottom) {
+        HStack {
+            Button("Share") { share() }.buttonStyle(.glass)
+            Button("Done") { done() }.buttonStyle(.glassProminent)
+        }
+    }
+```
+
+When back-deploying below 26, use `safeAreaInset` as the structural fallback
+and a standard material, not an imitation of Liquid Glass.
+
+For edge-to-edge media that doesn't naturally fill the adjacent safe area,
+`backgroundExtensionEffect()` extends that content behind the functional layer.
+It is a layout effect, not a way to turn content into glass.
 
 ## Containers, unions, morphing
 

@@ -21,13 +21,17 @@ Run these before recommending anything. Never assume the framework or target.
 # Deployment target(s) — decides whether fallbacks are needed at all
 grep -rhoE '(IPHONEOS|MACOSX|WATCHOS|TVOS|XROS)_DEPLOYMENT_TARGET = [0-9.]+' \
   --include=project.pbxproj . | sort -u
+# Active toolchain — decides whether OS 26 or OS 27 beta declarations apply
+xcodebuild -version
 # Framework mix — decides which reference file to load
-grep -rlE '^\s*import (SwiftUI|UIKit|AppKit)' --include=*.swift . \
-  | sed 's#.*#&#' | xargs -r grep -hoE 'import (SwiftUI|UIKit|AppKit)' | sort | uniq -c
+find . -name '*.swift' -print0 \
+  | xargs -0 grep -hoE 'import (SwiftUI|UIKit|AppKit|WidgetKit|CarPlay)' | sort | uniq -c
+# Xcode 26 compatibility opt-out — removed in Xcode 27 beta
+grep -rl 'UIDesignRequiresCompatibility' --include='*.plist' .
 ```
 
-Then read: which SDK is building (Xcode 26 → OS 26, Xcode 27 beta → OS 27 beta), and
-whether `UIDesignRequiresCompatibility` appears in Info.plist.
+If the project selects Xcode explicitly (for example with `DEVELOPER_DIR`), run
+the toolchain check in that environment rather than assuming the system default.
 
 | Finding | Consequence |
 |---|---|
@@ -36,6 +40,7 @@ whether `UIDesignRequiresCompatibility` appears in Info.plist.
 | Xcode 27 beta SDK | OS 27 beta behavior applies; `UIDesignRequiresCompatibility` is gone. Load `references/migration-26-to-27.md`. |
 | SwiftUI only | Load `references/swiftui.md` only. |
 | UIKit / AppKit present | Load `references/uikit.md` / `references/appkit.md` **in addition**, not instead. |
+| WidgetKit / CarPlay present | Also load `references/widgets.md` / `references/icons-and-symbols.md`. |
 
 ## 2. Route the request
 
@@ -43,6 +48,7 @@ whether `UIDesignRequiresCompatibility` appears in Info.plist.
 |---|---|
 | Adopt glass in an existing app | Recompile first, audit what the system already did, then close gaps. §3 → §4 |
 | Build a new glass component | Decision tree §3, then `references/swiftui.md` (or uikit/appkit) |
+| Add fixed custom bar chrome | Prefer a system toolbar; otherwise `references/swiftui.md` § Custom safe-area bars |
 | Review existing code | Run `scripts/audit_liquid_glass.py`, then `references/common-failures.md` |
 | Migrate OS 26 → OS 27 beta | `references/migration-26-to-27.md` |
 | Decide *whether* to use glass | Decision tree §3 — expect the answer to be "no" |
@@ -166,6 +172,7 @@ except current API documentation.
 
 - [ ] Glass is confined to the functional UI layer, not content.
 - [ ] Every system component that could do the job is doing the job.
+- [ ] Custom edge bars use the platform's safe-area bar API, not a hand-pinned glass slab.
 - [ ] No raw `glassEffect` behind a `Button`; glass button styles used instead.
 - [ ] Containers group *related* glass only; none nested.
 - [ ] `.clear` used only over rich media, with a dimming layer.

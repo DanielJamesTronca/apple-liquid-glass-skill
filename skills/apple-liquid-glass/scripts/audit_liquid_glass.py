@@ -160,11 +160,11 @@ CHECKS = [
     ),
     Check(
         id="hardcoded-foreground-on-glass",
-        pattern=r"\.foregroundColor\s*\(\s*\.(white|black)\s*\)|\.foregroundStyle\s*\(\s*\.(white|black)\s*\)",
-        near=r"\.glassEffect|buttonStyle\(\s*\.glass",
-        near_window=6,
+        pattern=r"\.glassEffect\s*\(",
+        near=r"\.foregroundColor\s*\(\s*\.(white|black)\s*\)|\.foregroundStyle\s*\(\s*\.(white|black)\s*\)",
+        near_window=4,
         confidence="high",
-        message="Hard-coded white/black foreground near glass.",
+        message="Glass is applied after a hard-coded white/black foreground.",
         inspect="Glass adapts symbol/text colour to the content behind it "
                 "(dark over light content, light over dark). Hard-coding opts "
                 "out and will become illegible. Use system colours.",
@@ -268,8 +268,8 @@ TEST_CHECKS = [
 ]
 
 
-def find_deployment_targets(root: str) -> dict[str, str]:
-    targets: dict[str, str] = {}
+def find_deployment_targets(root: str) -> dict[str, list[str]]:
+    targets: dict[str, set[str]] = {}
     rx = re.compile(r"(IPHONEOS|MACOSX|WATCHOS|TVOS|XROS)_DEPLOYMENT_TARGET = ([0-9.]+)")
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in {".git", "build", "DerivedData", ".build"}]
@@ -278,10 +278,28 @@ def find_deployment_targets(root: str) -> dict[str, str]:
                 try:
                     with open(os.path.join(dirpath, fn), "r", encoding="utf-8", errors="ignore") as fh:
                         for m in rx.finditer(fh.read()):
-                            targets[m.group(1)] = m.group(2)
+                            targets.setdefault(m.group(1), set()).add(m.group(2))
                 except OSError:
                     pass
-    return targets
+    return {platform: sorted(versions, key=lambda value: tuple(map(int, value.split("."))))
+            for platform, versions in sorted(targets.items())}
+
+
+def find_compatibility_keys(root: str) -> list[str]:
+    found = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d not in {".git", "build", "DerivedData", ".build"}]
+        for fn in filenames:
+            if not fn.endswith(".plist"):
+                continue
+            plist = os.path.join(dirpath, fn)
+            try:
+                with open(plist, "r", encoding="utf-8", errors="ignore") as fh:
+                    if "UIDesignRequiresCompatibility" in fh.read():
+                        found.append(plist)
+            except OSError:
+                pass
+    return sorted(found)
 
 
 def swift_files(root: str):
@@ -357,22 +375,31 @@ def main() -> int:
     findings = [f for f in findings if CONF_ORDER[f["confidence"]] >= floor]
     findings.sort(key=lambda f: (-CONF_ORDER[f["confidence"]], f["file"], f["line"]))
 
-    targets = find_deployment_targets(args.path if os.path.isdir(args.path) else ".")
+    project_root = args.path if os.path.isdir(args.path) else "."
+    targets = find_deployment_targets(project_root)
+    compatibility_keys = find_compatibility_keys(project_root)
 
     if args.json:
         print(json.dumps({"deployment_targets": targets,
+                          "compatibility_keys": compatibility_keys,
                           "files_scanned": n_files,
                           "findings": findings}, indent=2))
         return 0
 
     print(f"Liquid Glass audit — {n_files} Swift file(s) scanned")
     if targets:
-        print("Deployment targets: " + ", ".join(f"{k}={v}" for k, v in sorted(targets.items())))
-        low = [v for v in targets.values() if float(v.split(".")[0]) < 26]
-        print("  → Availability fallbacks ARE required (target below 26)." if low
+        print("Deployment targets: " + ", ".join(
+            f"{platform}={','.join(versions)}" for platform, versions in targets.items()))
+        low = [version for versions in targets.values() for version in versions
+               if int(version.split(".")[0]) < 26]
+        print("  → Availability fallbacks ARE required for targets below 26." if low
               else "  → Target is 26+; `if #available(iOS 26…)` branches are dead code.")
     else:
         print("Deployment targets: not found — determine before advising on fallbacks.")
+
+    if compatibility_keys:
+        print("Compatibility key found: " + ", ".join(compatibility_keys))
+        print("  → Inspect its value; Xcode 27 beta removed this key.")
 
     if not findings:
         print("\nNo leads found. This is not proof the glass is correct — "

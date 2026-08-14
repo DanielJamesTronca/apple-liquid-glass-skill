@@ -50,8 +50,8 @@ until the API documentation for the active Xcode toolchain says otherwise.
 
 ## Apple documentation endpoints
 
-Apple's documentation pages are rendered client-side. The checker reads the
-underlying JSON:
+Apple's documentation pages are rendered client-side. For exact declarations
+and availability, read the underlying JSON:
 
 ```text
 https://developer.apple.com/tutorials/data/documentation/<path>.json
