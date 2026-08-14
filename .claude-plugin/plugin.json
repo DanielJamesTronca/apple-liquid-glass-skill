@@ -1,0 +1,25 @@
+{
+  "name": "apple-liquid-glass",
+  "description": "Design, implement, review, and migrate Liquid Glass UI on Apple platforms across OS 26 and OS 27 betas, with SwiftUI as the default path.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Daniel James Tronca"
+  },
+  "homepage": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+  "repository": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+  "license": "MIT",
+  "keywords": [
+    "liquid-glass",
+    "swiftui",
+    "uikit",
+    "appkit",
+    "ios",
+    "ipados",
+    "macos",
+    "apple",
+    "design-system",
+    "accessibility",
+    "widgetkit",
+    "icon-composer"
+  ]
+}

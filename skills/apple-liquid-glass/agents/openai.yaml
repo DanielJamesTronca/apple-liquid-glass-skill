@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Liquid Glass"
+  short_description: "Build and review Apple Liquid Glass UI"
+  default_prompt: "Use $apple-liquid-glass to review this Apple app and fix its Liquid Glass implementation."

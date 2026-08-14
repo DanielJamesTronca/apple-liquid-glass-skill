@@ -1,0 +1,34 @@
+{
+  "name": "apple-liquid-glass",
+  "version": "1.0.0",
+  "description": "Design, implement, review, and migrate Liquid Glass UI on Apple platforms across OS 26 and OS 27 betas.",
+  "author": {
+    "name": "Daniel James Tronca",
+    "email": "danieljames.forwork@gmail.com",
+    "url": "https://github.com/DanielJamesTronca"
+  },
+  "homepage": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+  "repository": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+  "license": "MIT",
+  "keywords": [
+    "liquid-glass",
+    "swiftui",
+    "uikit",
+    "appkit",
+    "widgetkit",
+    "ios",
+    "macos",
+    "apple"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Apple Liquid Glass",
+    "shortDescription": "Build and review Apple Liquid Glass UI.",
+    "longDescription": "Apply current Apple guidance to Liquid Glass design, implementation, review, and OS 26-to-27 beta migration across SwiftUI, UIKit, AppKit, widgets, and app icons.",
+    "developerName": "Daniel James Tronca",
+    "category": "Design",
+    "capabilities": [],
+    "websiteURL": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+    "defaultPrompt": "Review this Apple app's Liquid Glass implementation and fix verified issues."
+  }
+}

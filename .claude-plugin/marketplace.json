@@ -1,0 +1,31 @@
+{
+  "name": "apple-liquid-glass-skill",
+  "owner": {
+    "name": "Daniel James Tronca",
+    "email": "danieljames.forwork@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "apple-liquid-glass",
+      "source": ".",
+      "description": "Design, implement, review, and migrate Liquid Glass UI on Apple platforms across OS 26 and OS 27 betas.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Daniel James Tronca"
+      },
+      "homepage": "https://github.com/DanielJamesTronca/apple-liquid-glass-skill",
+      "license": "MIT",
+      "category": "design",
+      "keywords": [
+        "liquid-glass",
+        "swiftui",
+        "uikit",
+        "appkit",
+        "ios",
+        "macos",
+        "design-system",
+        "accessibility"
+      ]
+    }
+  ]
+}
