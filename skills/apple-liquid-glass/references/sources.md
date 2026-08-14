@@ -3,6 +3,14 @@
 Use this file when sources disagree, a claim needs a citation, or the current
 verification boundary matters.
 
+## Curated snapshot
+
+This skill was reviewed against Apple's published Liquid Glass guidance and API
+documentation on 14 August 2026. It intentionally covers the APIs, design
+decisions, and migration issues most useful in real projects rather than trying
+to mirror every Apple page. Treat OS 27 beta details as a snapshot and verify a
+specific declaration when the active SDK or task makes it consequential.
+
 ## Source precedence
 
 Resolve conflicts in this order:

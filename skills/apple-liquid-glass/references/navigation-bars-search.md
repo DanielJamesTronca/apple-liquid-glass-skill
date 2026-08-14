@@ -2,6 +2,14 @@
 
 Load for toolbars, tab bars, sidebars, and search placement.
 
+## Contents
+
+- [Automatic bars](#bars-are-automatic--subtraction-first)
+- [Toolbar composition](#toolbar-composition)
+- [OS 27 beta toolbar APIs](#os-27-beta-toolbar-apis-check-availability)
+- [Search placement](#search-placement-wwdc26-292)
+- [Sidebars](#sidebars)
+
 ## Bars are automatic — subtraction first
 
 Standard bars adopt Liquid Glass on recompile. The first adoption pass is

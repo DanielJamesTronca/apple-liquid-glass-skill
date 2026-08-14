@@ -3,6 +3,13 @@
 Liquid Glass is a translucent, motion-bearing material. Accessibility is not a
 post-hoc pass here — three system settings change what the material *is*.
 
+## Contents
+
+- [System settings](#the-three-settings-that-change-glass)
+- [Adaptive foreground colors](#why-hard-coded-foreground-colours-break-glass)
+- [Custom controls](#custom-controls-wwdc26-220)
+- [Glass-specific checks](#glass-specific-accessibility-checks)
+
 ## The three settings that change glass
 
 | Setting | Effect | What you must check |

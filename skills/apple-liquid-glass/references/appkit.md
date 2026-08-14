@@ -1,6 +1,6 @@
 # AppKit — Liquid Glass
 
-Load in addition to `swiftui.md` when the project imports AppKit.
+Load for AppKit code. In a mixed SwiftUI/AppKit project, also load `swiftui.md`.
 
 ## Verified API surface
 

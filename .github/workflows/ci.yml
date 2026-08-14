@@ -26,7 +26,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run test suite
-        run: python tests/test_audit.py
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
 
       - name: Audit must stay clean on the good fixture
         run: |

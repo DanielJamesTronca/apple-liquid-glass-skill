@@ -33,11 +33,12 @@ Run `/reload-plugins` if Claude Code asks you to activate the plugin.
 | "I upgraded to Xcode 27 beta" | Check the OS 26 to OS 27 beta changes, especially scroll-edge behavior and availability. |
 | "Should this be glass?" | Give a direct answer and a concrete alternative when the answer is no. |
 
-The skill keeps SwiftUI as the default path and loads UIKit, AppKit, widget, icon, accessibility, testing, or migration guidance only when the task needs it.
+The skill loads only the framework and task guidance the request needs, so a
+pure UIKit or AppKit task does not pull SwiftUI into context.
 
 ## Sources and versions
 
-The guidance is grounded in Apple API documentation, the Human Interface Guidelines, WWDC sessions and Group Labs, sample code, and release notes. Each reference file cites the Apple material behind its rules.
+The guidance is a curated snapshot reviewed against Apple API documentation, the Human Interface Guidelines, WWDC sessions and Group Labs, sample code, and release notes on 14 August 2026. It focuses on the APIs and decisions most useful in real projects rather than trying to reproduce all of Apple's documentation. Each reference file cites the Apple material behind its rules.
 
 OS 27 APIs are currently beta. The skill keeps OS 26 guidance beside the beta material and routes by SDK, platform, and deployment target. Verify beta declarations against the documentation bundled with the Xcode version in use.
 
@@ -48,10 +49,14 @@ OS 27 APIs are currently beta. The skill keeps OS 26 guidance beside the beta ma
 python3 skills/apple-liquid-glass/scripts/audit_liquid_glass.py path/to/Sources
 
 # Run the repository tests.
-python3 tests/test_audit.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 The audit reports leads because a regex cannot see the UI layer, runtime backdrop, or design intent. A flagged line can be correct. Read its surrounding code before changing it.
+
+`tests/skill_evals.json` records positive and negative trigger prompts, the
+references each task should route to, and the outcomes a forward test should
+produce. CI validates this contract and the progressive-disclosure structure.
 
 ## Repository layout
 
