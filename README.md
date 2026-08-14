@@ -1,20 +1,34 @@
-# Apple Liquid Glass
+<p align="center">
+  <img src="assets/liquid-glass-cover.png" alt="Abstract translucent glass panels in a dark blue-grey space" width="100%">
+</p>
 
-An [Agent Skill](https://agentskills.io) for designing, implementing, reviewing, and migrating Liquid Glass UI on Apple platforms. It covers SwiftUI, UIKit, AppKit, widgets, and app icons across OS 26 and the current OS 27 betas.
+<h1 align="center">Apple Liquid Glass</h1>
 
-The first question is whether an element should be glass at all. Cards, list rows, and other content surfaces usually should not. System bars, search fields, sheets, menus, and popovers already adopt Liquid Glass when you build with the current SDK. The skill checks those cases before it writes custom glass code.
+<p align="center">
+  Practical design and implementation guidance for Liquid Glass on Apple platforms.
+</p>
+
+<p align="center">
+  <a href="https://github.com/DanielJamesTronca/apple-liquid-glass-skill/actions/workflows/ci.yml"><img src="https://github.com/DanielJamesTronca/apple-liquid-glass-skill/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4b5563.svg" alt="MIT License"></a>
+</p>
+
+Most Liquid Glass work should begin by removing custom chrome, not adding more
+of it. System bars, search, sheets, menus, and popovers already adapt when an
+app builds with the current SDK. This skill helps an agent decide when custom
+glass is justified, use the right API for the active framework, and review
+results in context.
 
 ## Install
 
-For Codex, Claude Code, Cursor, and other Agent Skills clients:
+For Agent Skills clients such as Codex, Claude Code, and Cursor:
 
 ```bash
 npx skills add DanielJamesTronca/apple-liquid-glass-skill -g
 ```
 
-In Codex, you can instead ask `$skill-installer` to install `apple-liquid-glass` from this repository.
-
-For Claude Code's plugin marketplace:
+In Codex, ask `$skill-installer` to install `apple-liquid-glass` from this
+repository. For Claude Code's plugin marketplace:
 
 ```text
 /plugin marketplace add DanielJamesTronca/apple-liquid-glass-skill
@@ -23,58 +37,51 @@ For Claude Code's plugin marketplace:
 
 Run `/reload-plugins` if Claude Code asks you to activate the plugin.
 
-## What it handles
+## What it covers
 
-| Ask | Result |
+| Need | The skill helps you |
 |---|---|
-| "Adopt Liquid Glass in this app" | Recompile first, then inspect bars, search, presentations, custom controls, icons, and widgets in that order. |
-| "Make this floating control glass" | Decide whether glass belongs there, then use the documented API for the project's framework and deployment target. |
-| "Review my Liquid Glass code" | Run the conservative audit and inspect each lead in context. |
-| "I upgraded to Xcode 27 beta" | Check the OS 26 to OS 27 beta changes, especially scroll-edge behavior and availability. |
-| "Should this be glass?" | Give a direct answer and a concrete alternative when the answer is no. |
+| Adopt Liquid Glass in an existing app | Recompile first, then inspect bars, search, presentations, custom controls, icons, and widgets. |
+| Build or review a custom control | Decide whether glass belongs there before selecting the framework API. |
+| Upgrade to Xcode 27 beta | Separate OS 26 behaviour from current beta changes and verify availability. |
+| Work in SwiftUI, UIKit, or AppKit | Load only the relevant framework reference. |
+| Check widgets, icons, accessibility, or performance | Use the focused reference without pulling unrelated guidance into context. |
 
-The skill loads only the framework and task guidance the request needs, so a
-pure UIKit or AppKit task does not pull SwiftUI into context.
+## The design position
 
-## Sources and versions
+Liquid Glass belongs to the functional layer: navigation, controls, and other
+interactive elements above content. Cards, list rows, and decorative content
+surfaces usually should not use it. The skill prefers system components,
+concentric shapes, semantic tint, and accessibility checks over hand-made blur
+or arbitrary opacity values.
 
-The guidance is a curated snapshot reviewed against Apple API documentation, the Human Interface Guidelines, WWDC sessions and Group Labs, sample code, and release notes on 14 August 2026. It focuses on the APIs and decisions most useful in real projects rather than trying to reproduce all of Apple's documentation. Each reference file cites the Apple material behind its rules.
+## Included tooling
 
-OS 27 APIs are currently beta. The skill keeps OS 26 guidance beside the beta material and routes by SDK, platform, and deployment target. Verify beta declarations against the documentation bundled with the Xcode version in use.
-
-## Included checks
+The bundled audit reports conservative leads for a Swift project; it never
+rewrites code or treats a match as a verdict.
 
 ```bash
-# Report leads for inspection. This script never rewrites code.
 python3 skills/apple-liquid-glass/scripts/audit_liquid_glass.py path/to/Sources
-
-# Run the repository tests.
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-The audit reports leads because a regex cannot see the UI layer, runtime backdrop, or design intent. A flagged line can be correct. Read its surrounding code before changing it.
+`tests/skill_evals.json` records positive and negative trigger prompts so
+routing changes can be checked without pretending a keyword matcher measures
+agent behaviour.
 
-`tests/skill_evals.json` records positive and negative trigger prompts, the
-references each task should route to, and the outcomes a forward test should
-produce. CI validates this contract and the progressive-disclosure structure.
+## Sources and scope
 
-## Repository layout
-
-```text
-skills/apple-liquid-glass/
-├── SKILL.md                 # routing, decision rules, implementation constraints
-├── agents/openai.yaml       # Codex and ChatGPT display metadata
-├── references/              # framework and task guidance, loaded on demand
-└── scripts/
-    └── audit_liquid_glass.py # conservative Swift source review
-```
-
-The repository also includes manifests for Codex/ChatGPT plugins and the Claude Code marketplace. Both point to the same skill folder.
+This is a curated snapshot reviewed against Apple API documentation, Human
+Interface Guidelines, WWDC sessions, Group Labs, sample code, and release notes
+on 14 August 2026. It prioritizes the decisions and APIs that recur in real
+projects instead of reproducing Apple's documentation. For a consequential beta
+claim, verify the declaration against the Xcode version in use.
 
 ## Contributing
 
-Corrections need an Apple source and the affected OS versions. See [CONTRIBUTING.md](CONTRIBUTING.md) for the source order and test commands.
+Corrections need an Apple source and the affected OS versions. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for source precedence, test commands, and
+the prompt-evaluation workflow.
 
-## License
-
-[MIT](LICENSE). Apple, Liquid Glass, and the cited Apple documentation remain the property of Apple Inc. This project is independent and is not endorsed by Apple.
+Released under the [MIT License](LICENSE). This project is independent and is
+not affiliated with or endorsed by Apple.
