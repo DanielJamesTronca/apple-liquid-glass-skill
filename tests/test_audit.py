@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -80,6 +81,26 @@ class TestAuditSignal(unittest.TestCase):
         """Must not crash when no pbxproj exists — it degrades to a warning."""
         self.assertIsInstance(audit(FIXTURES)["deployment_targets"], dict)
 
+    def test_multiple_deployment_targets_are_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "project.pbxproj").write_text(
+                "IPHONEOS_DEPLOYMENT_TARGET = 18.0;\n"
+                "IPHONEOS_DEPLOYMENT_TARGET = 26.0;\n"
+            )
+            self.assertEqual(
+                ["18.0", "26.0"],
+                audit(root)["deployment_targets"]["IPHONEOS"],
+            )
+
+    def test_compatibility_key_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plist = root / "Info.plist"
+            plist.write_text("<key>UIDesignRequiresCompatibility</key><true/>")
+            reported = audit(root)["compatibility_keys"]
+            self.assertEqual([str(plist)], reported)
+
 
 class TestScriptsHealthy(unittest.TestCase):
     def test_scripts_compile(self):
@@ -141,6 +162,15 @@ class TestSkillStructure(unittest.TestCase):
     def test_stays_concise(self):
         lines = len(self.text.splitlines())
         self.assertLess(lines, 250, f"SKILL.md grew to {lines} lines; move detail to references/")
+
+    def test_current_bar_guidance_is_present(self):
+        swiftui = (SKILL / "references" / "swiftui.md").read_text()
+        for symbol in (
+            "safeAreaBar(edge:alignment:spacing:content:)",
+            "toolbarMinimizationRestoration(_:for:)",
+            "toolbarMinimizationSafeAreaAdjustment(_:for:)",
+        ):
+            self.assertIn(symbol, swiftui)
 
     def test_linked_references_all_exist(self):
         import re

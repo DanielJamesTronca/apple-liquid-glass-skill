@@ -36,6 +36,8 @@ Consequences:
 | Change | Detail |
 |---|---|
 | `toolbarMinimizationBehavior(_:for:)` | **New in 27**, all platforms. The OS 26 toolbar-minimize spelling is no longer in current docs — verify the symbol in your SDK if you support both. |
+| `toolbarMinimizationRestoration(_:for:)` | **New in 27**, all platforms. Leave automatic unless restoration behavior is an explicit product decision. |
+| `toolbarMinimizationSafeAreaAdjustment(_:for:)` | **New in 27**, all platforms. Disable only when the app deliberately manages full-bleed insets during minimization. |
 | `tabBarMinimizeBehavior(_:)` | **Unchanged**, still iOS 26.0. Do not "migrate" it. |
 | `ToolbarOverflowMenu` / `toolbarOverflowMenu(content:)` | New in 27, **iOS/iPadOS/Catalyst/visionOS only** — no macOS/watchOS/tvOS. Guard cross-platform code. |
 | `ToolbarItemPlacement.topBarPinnedTrailing` | New in 27, **no macOS**. |
@@ -110,6 +112,7 @@ faithfully renders your current design with the appropriate corner radius."*
 - [ ] Re-evaluate every non-`.automatic` scroll edge effect style, especially `.soft`.
 - [ ] Audit menu images; add `preferredImageVisibility` only where needed.
 - [ ] Verify OS 27 beta-only toolbar APIs are guarded on macOS/watchOS/tvOS.
+- [ ] If toolbar minimization is customized, verify restoration and safe-area behavior while scrolling.
 - [ ] Check layout at both ends of the Liquid Glass slider.
 - [ ] Re-open Icon Composer file; review translucency, highlights, refraction.
 - [ ] Delete custom blur imitations — they desync from the slider.

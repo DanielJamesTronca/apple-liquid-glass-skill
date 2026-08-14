@@ -37,6 +37,21 @@ ToolbarItem(placement: .topBarTrailing) {
 .sharedBackgroundVisibility(.hidden)   // iOS/macOS 26.0
 ```
 
+The modifier belongs on `ToolbarItem` (or other `ToolbarContent`), not the view
+inside it. Hiding the shared background can also change grouping and spacing,
+so use it only when the item should genuinely appear bare.
+
+```swift
+// Wrong: the toolbar item still owns the shared background.
+ToolbarItem(placement: .topBarTrailing) {
+    ProfileImage().sharedBackgroundVisibility(.hidden)
+}
+
+// Right
+ToolbarItem(placement: .topBarTrailing) { ProfileImage() }
+    .sharedBackgroundVisibility(.hidden)
+```
+
 - **Colour**: HIG — *"Avoid applying a similar color to toolbar item labels and
   content layer backgrounds. If your app already has bright, colorful content
   … prefer using the default monochromatic appearance."*
@@ -57,6 +72,12 @@ ToolbarItemGroup { UndoButton(); RedoButton() }
 
 .toolbarMinimizationBehavior(.onScrollDown, for: .navigationBar)  // 27, all platforms
 ```
+
+OS 27 beta also provides `toolbarMinimizationRestoration(_:for:)` and
+`toolbarMinimizationSafeAreaAdjustment(_:for:)`. Keep their defaults unless the
+product has a specific restoration requirement or manages full-bleed content
+while the bar minimizes; disabling safe-area adjustment transfers inset
+responsibility to the app.
 
 `tabBarMinimizeBehavior(_:)` is iOS 26 and unchanged — do not migrate it to the
 "minimization" spelling.
