@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Structural contracts for routing, prompt evals, and source expectations."""
+"""Structural contracts for routing and prompt evaluations."""
 
 from __future__ import annotations
 
 import json
 import re
-import subprocess
-import sys
 import unittest
 from pathlib import Path
 
@@ -14,8 +12,6 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILL = ROOT / "skills" / "apple-liquid-glass"
 SKILL_MD = SKILL / "SKILL.md"
 EVALS = ROOT / "tests" / "skill_evals.json"
-SOURCE_CHECK = SKILL / "scripts" / "check_sources.py"
-SOURCE_EXPECTATIONS = SKILL / "scripts" / "source_expectations.json"
 
 
 class TestPromptEvalContract(unittest.TestCase):
@@ -96,35 +92,6 @@ class TestProgressiveDisclosure(unittest.TestCase):
         text = SKILL_MD.read_text()
         self.assertIn("Do not load SwiftUI guidance for a pure UIKit or AppKit task.", text)
         self.assertNotIn("in addition, not instead", text)
-
-
-class TestSourceExpectations(unittest.TestCase):
-    def test_manifest_is_valid_offline(self):
-        subprocess.run(
-            [sys.executable, str(SOURCE_CHECK), "--offline"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-
-    def test_volatile_api_families_are_covered(self):
-        data = json.loads(SOURCE_EXPECTATIONS.read_text())
-        ids = {source["id"] for source in data["sources"]}
-        required = {
-            "swiftui-glass-effect",
-            "swiftui-glass-container",
-            "swiftui-toolbar-minimization",
-            "swiftui-toolbar-restoration",
-            "swiftui-toolbar-safe-area-adjustment",
-            "swiftui-toolbar-overflow-menu",
-            "swiftui-toolbar-visibility-priority",
-            "uikit-glass-effect",
-            "appkit-glass-effect-view",
-            "appkit-corner-configuration",
-            "widgetkit-accented-rendering",
-        }
-        self.assertFalse(required - ids, f"untracked API families: {sorted(required - ids)}")
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -94,24 +94,22 @@ Require:
 Never claim a visual result that has not been rendered. If the app cannot run,
 state that limitation and give the user the remaining checks.
 
-## Scripts and source checks
+## Script
 
 Resolve paths relative to this skill directory.
 
 ```bash
 python3 scripts/audit_liquid_glass.py <project-path>
 python3 scripts/audit_liquid_glass.py <project-path> --json --min-confidence high
-python3 scripts/check_sources.py --check
 ```
 
 Treat audit findings as leads, not verdicts. Read the surrounding code, layer,
 deployment target, and runtime backdrop before editing.
 
-`check_sources.py` verifies volatile API names, declarations, and availability
-against Apple's current documentation JSON. Re-run it after Apple beta or SDK
-updates. On Xcode 27 beta, also run `xcrun agent skills export` and prefer
-matching-version Apple guidance where it overlaps this skill; current API
-documentation remains authoritative.
+On Xcode 27 beta, also run `xcrun agent skills export` and prefer
+matching-version Apple guidance where it overlaps this skill. Use
+`references/sources.md` when a beta API, availability claim, or source conflict
+needs current verification.
 
 ## Definition of done
 

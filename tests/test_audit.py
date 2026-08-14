@@ -25,7 +25,6 @@ SKILL = ROOT / "skills" / "apple-liquid-glass"
 SCRIPTS = SKILL / "scripts"
 FIXTURES = ROOT / "tests" / "fixtures"
 AUDIT = SCRIPTS / "audit_liquid_glass.py"
-SOURCE_CHECK = SCRIPTS / "check_sources.py"
 
 # Leads the bad fixture must surface at medium confidence or above.
 EXPECTED_BAD = {
@@ -106,7 +105,7 @@ class TestAuditSignal(unittest.TestCase):
 class TestScriptsHealthy(unittest.TestCase):
     def test_scripts_compile(self):
         subprocess.run(
-            [sys.executable, "-m", "py_compile", str(AUDIT), str(SOURCE_CHECK)],
+            [sys.executable, "-m", "py_compile", str(AUDIT)],
             check=True,
             capture_output=True,
         )

@@ -220,6 +220,5 @@ create a custom component, ensure that its corner radius is also concentric."*
 
 WWDC26 269 (What's new in SwiftUI), WWDC25 323
 (Build a SwiftUI app with the new design), WWDC25 256, HIG Materials, HIG
-Toolbars, and the API pages listed above. Machine-checked API expectations live
-in `scripts/source_expectations.json`; verification policy lives in
-`sources.md`.
+Toolbars, and the API pages listed above. Verification policy and source
+precedence live in `sources.md`.

@@ -53,11 +53,9 @@ OS 27 beta guidance must not erase OS 26 behavior. Keep both and route by SDK an
 2. Put it in the right reference file. `SKILL.md` stays under 160 lines and holds routing and
    judgment, not API detail.
 3. Cite the source in the affected reference file.
-4. Update `scripts/source_expectations.json` when a checked declaration or
-   availability changes, but only after reviewing the affected guidance.
-5. Add or update a prompt case in `tests/skill_evals.json` when routing or scope
+4. Add or update a prompt case in `tests/skill_evals.json` when routing or scope
    changes.
-6. Run the tests below.
+5. Run the tests below.
 
 Community posts can expose useful edge cases, but they do not outrank current Apple documentation.
 Keep a community-derived rule only when it is reproducible, primary sources are silent, and the
@@ -85,14 +83,12 @@ A high-confidence finding in `GoodGlass.swift` is a bug in the audit, not the fi
 
 ```bash
 python3 -m unittest discover -s tests -p 'test_*.py' -v
-python3 skills/apple-liquid-glass/scripts/check_sources.py --check
 ```
 
 This checks that the bad fixture produces the expected leads, the good fixture produces no
 medium-or-higher findings, JSON mode is well-formed, linked references exist,
 prompt routes have positive and negative cases, long references have contents,
-source expectations are well-formed, and plugin manifests parse. CI runs the
-offline suite on every push; a scheduled workflow checks Apple's live docs.
+and plugin manifests parse. CI runs the same suite on every push.
 
 ## Forward-testing the prompt matrix
 
