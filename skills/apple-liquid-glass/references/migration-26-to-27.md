@@ -3,6 +3,16 @@
 Load when the project builds against the Xcode 27 beta SDK, or the user reports that
 bars/menus/icons changed after an upgrade.
 
+## Contents
+
+- [No-code behavior changes](#what-happens-with-no-code-change)
+- [Liquid Glass preference](#the-user-facing-liquid-glass-slider)
+- [SwiftUI](#swiftui-changes)
+- [UIKit](#uikit-changes)
+- [AppKit](#appkit-changes-macos-27-beta)
+- [App icons](#app-icons)
+- [Migration checklist](#migration-checklist)
+
 Read the current iOS/iPadOS and macOS 27 release notes before adding a
 workaround. Apple is still fixing Liquid Glass rendering and interaction bugs
 between betas; a workaround for an earlier seed can become the defect in the

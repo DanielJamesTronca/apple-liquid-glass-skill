@@ -47,11 +47,20 @@ OS 27 APIs are currently beta. The skill keeps OS 26 guidance beside the beta ma
 # Report leads for inspection. This script never rewrites code.
 python3 skills/apple-liquid-glass/scripts/audit_liquid_glass.py path/to/Sources
 
+# Compare volatile API declarations and availability with Apple's live docs.
+python3 skills/apple-liquid-glass/scripts/check_sources.py --check
+
 # Run the repository tests.
-python3 tests/test_audit.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 The audit reports leads because a regex cannot see the UI layer, runtime backdrop, or design intent. A flagged line can be correct. Read its surrounding code before changing it.
+
+`tests/skill_evals.json` records positive and negative trigger prompts, the
+references each task should route to, and the outcomes a forward test should
+produce. CI validates this contract and the progressive-disclosure structure.
+The weekly source-freshness workflow separately detects semantic drift in
+Apple's documented API names, declarations, and platform availability.
 
 ## Repository layout
 
@@ -61,7 +70,8 @@ skills/apple-liquid-glass/
 ├── agents/openai.yaml       # Codex and ChatGPT display metadata
 ├── references/              # framework and task guidance, loaded on demand
 └── scripts/
-    └── audit_liquid_glass.py # conservative Swift source review
+    ├── audit_liquid_glass.py # conservative Swift source review
+    └── check_sources.py      # live Apple API expectation checks
 ```
 
 The repository also includes manifests for Codex/ChatGPT plugins and the Claude Code marketplace. Both point to the same skill folder.

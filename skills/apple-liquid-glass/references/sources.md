@@ -48,6 +48,16 @@ until the API documentation for the active Xcode toolchain says otherwise.
 - Export Apple's Xcode agent skills from the installed Xcode when available and
   prefer matching-version guidance where it overlaps this skill.
 
+## Machine-checked expectations
+
+`scripts/source_expectations.json` records the title, declaration, and exact
+platform availability expected for volatile public APIs used by this skill.
+Run `python3 scripts/check_sources.py --check` after an Apple beta or SDK update.
+
+The checker proves that the documented surface still matches the recorded
+expectation. It does not prove that this skill interpreted the API or design
+guidance correctly; review affected rules whenever an expectation changes.
+
 ## Apple documentation endpoints
 
 Apple's documentation pages are rendered client-side. For exact declarations

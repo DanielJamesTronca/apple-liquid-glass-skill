@@ -50,10 +50,14 @@ OS 27 beta guidance must not erase OS 26 behavior. Keep both and route by SDK an
 ## Adding or changing a rule
 
 1. Verify against the documentation JSON above.
-2. Put it in the right reference file. `SKILL.md` stays under 250 lines and holds routing and
+2. Put it in the right reference file. `SKILL.md` stays under 160 lines and holds routing and
    judgment, not API detail.
 3. Cite the source in the affected reference file.
-4. Run the tests below.
+4. Update `scripts/source_expectations.json` when a checked declaration or
+   availability changes, but only after reviewing the affected guidance.
+5. Add or update a prompt case in `tests/skill_evals.json` when routing or scope
+   changes.
+6. Run the tests below.
 
 Community posts can expose useful edge cases, but they do not outrank current Apple documentation.
 Keep a community-derived rule only when it is reproducible, primary sources are silent, and the
@@ -80,12 +84,26 @@ A high-confidence finding in `GoodGlass.swift` is a bug in the audit, not the fi
 ## Running the tests
 
 ```bash
-python3 tests/test_audit.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+python3 skills/apple-liquid-glass/scripts/check_sources.py --check
 ```
 
 This checks that the bad fixture produces the expected leads, the good fixture produces no
-medium-or-higher findings, JSON mode is well-formed, linked references exist, and plugin manifests
-parse. CI runs the same suite on every push.
+medium-or-higher findings, JSON mode is well-formed, linked references exist,
+prompt routes have positive and negative cases, long references have contents,
+source expectations are well-formed, and plugin manifests parse. CI runs the
+offline suite on every push; a scheduled workflow checks Apple's live docs.
+
+## Forward-testing the prompt matrix
+
+Use `tests/skill_evals.json` as the reusable evaluation set. Give a fresh agent
+only the skill and one prompt at a time. Confirm whether the skill triggered,
+which references it loaded, and whether the response produced the listed
+outcomes. Do not reveal the expected result before the run.
+
+Static CI intentionally validates the matrix contract rather than pretending a
+keyword matcher represents model behavior. Run fresh-agent forward tests after
+material changes to the description, workflow, or routing.
 
 ## Reporting a wrong rule
 

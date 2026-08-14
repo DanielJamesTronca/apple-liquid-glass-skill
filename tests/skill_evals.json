@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "swiftui-review",
+      "prompt": "Review this SwiftUI view: I put glassEffect on every toolbar button and the result looks muddy.",
+      "should_trigger": true,
+      "route": "review",
+      "expected_references": ["references/swiftui.md", "references/common-failures.md"],
+      "expected_outcomes": ["inspect the SDK and deployment targets", "treat audit findings as leads", "prefer system toolbar styling"]
+    },
+    {
+      "id": "uikit-migration",
+      "prompt": "My UIKit navigation bars changed after moving to Xcode 27 beta. Migrate the Liquid Glass behavior safely.",
+      "should_trigger": true,
+      "route": "migration",
+      "expected_references": ["references/uikit.md", "references/migration-26-to-27.md"],
+      "expected_outcomes": ["verify the active beta SDK", "review scroll edge overrides", "preserve OS 26 behavior when deployed"]
+    },
+    {
+      "id": "appkit-component",
+      "prompt": "Build a custom NSGlassEffectView control cluster in this AppKit window.",
+      "should_trigger": true,
+      "route": "appkit",
+      "expected_references": ["references/appkit.md"],
+      "expected_outcomes": ["avoid loading SwiftUI guidance unless SwiftUI is present", "group only related glass", "build against the intended SDK"]
+    },
+    {
+      "id": "design-rejection",
+      "prompt": "Should every card in this iOS feed use Liquid Glass?",
+      "should_trigger": true,
+      "route": "design",
+      "expected_references": ["references/design-decision-tree.md"],
+      "expected_outcomes": ["reject content-layer glass", "explain the hierarchy problem", "offer a standard-material alternative"]
+    },
+    {
+      "id": "navigation-search",
+      "prompt": "Place a Liquid Glass search field correctly in this iPhone and iPad toolbar layout.",
+      "should_trigger": true,
+      "route": "navigation",
+      "expected_references": ["references/navigation-bars-search.md"],
+      "expected_outcomes": ["choose placement before styling", "use the system search field", "account for platform conventions"]
+    },
+    {
+      "id": "presentation-review",
+      "prompt": "My SwiftUI sheet lost the system Liquid Glass appearance after I set presentationBackground.",
+      "should_trigger": true,
+      "route": "presentations",
+      "expected_references": ["references/swiftui.md", "references/presentations.md"],
+      "expected_outcomes": ["inspect why the override exists", "prefer the automatic system presentation", "verify the rendered sheet"]
+    },
+    {
+      "id": "widget-rendering",
+      "prompt": "Update this WidgetKit widget for accented, tinted, and clear appearances without applying glassEffect.",
+      "should_trigger": true,
+      "route": "widgets",
+      "expected_references": ["references/widgets.md"],
+      "expected_outcomes": ["treat widgets as a separate rendering system", "test every rendering mode", "avoid in-app glassEffect"]
+    },
+    {
+      "id": "icon-composer",
+      "prompt": "Review this layered Icon Composer app icon for Liquid Glass and OS 27 beta appearances.",
+      "should_trigger": true,
+      "route": "icons",
+      "expected_references": ["references/icons-and-symbols.md", "references/migration-26-to-27.md"],
+      "expected_outcomes": ["keep appearance variants recognizable", "verify at small sizes", "recheck beta rendering"]
+    },
+    {
+      "id": "carplay-icons",
+      "prompt": "Check whether these CPMapButton images remain legible on the automatic CarPlay Liquid Glass controls.",
+      "should_trigger": true,
+      "route": "icons",
+      "expected_references": ["references/icons-and-symbols.md"],
+      "expected_outcomes": ["avoid custom glass backgrounds", "test changing map content", "verify CarPlay layouts"]
+    },
+    {
+      "id": "custom-control-accessibility",
+      "prompt": "Make this interactive Liquid Glass slider work with Reduce Motion, VoiceOver, and Reduce Transparency.",
+      "should_trigger": true,
+      "route": "accessibility",
+      "expected_references": ["references/accessibility.md"],
+      "expected_outcomes": ["expose purpose value actions and feedback", "provide a reduced-motion path", "test system accessibility variants"]
+    },
+    {
+      "id": "glass-performance",
+      "prompt": "Profile hitches caused by dozens of glassEffect views inside a scrolling SwiftUI list.",
+      "should_trigger": true,
+      "route": "performance",
+      "expected_references": ["references/performance-and-testing.md", "references/common-failures.md"],
+      "expected_outcomes": ["question content-layer glass", "profile on a real device", "avoid snapshot-only conclusions"]
+    },
+    {
+      "id": "api-availability",
+      "prompt": "Cite the current platform availability for ToolbarOverflowMenu and toolbarMinimizationBehavior.",
+      "should_trigger": true,
+      "route": "sources",
+      "expected_references": ["references/sources.md", "references/swiftui.md"],
+      "expected_outcomes": ["check current Apple documentation", "preserve beta labels", "report platform asymmetry"]
+    },
+    {
+      "id": "css-glassmorphism",
+      "prompt": "Add frosted glassmorphism cards to this React dashboard with CSS backdrop-filter.",
+      "should_trigger": false,
+      "route": "out-of-scope",
+      "expected_references": [],
+      "expected_outcomes": ["do not invoke the Apple Liquid Glass skill"]
+    },
+    {
+      "id": "android-material",
+      "prompt": "Implement a blurred Material You bottom sheet in this Android app.",
+      "should_trigger": false,
+      "route": "out-of-scope",
+      "expected_references": [],
+      "expected_outcomes": ["do not invoke the Apple Liquid Glass skill"]
+    },
+    {
+      "id": "generic-swiftui",
+      "prompt": "Refactor this SwiftUI networking layer to use async await and improve error handling.",
+      "should_trigger": false,
+      "route": "out-of-scope",
+      "expected_references": [],
+      "expected_outcomes": ["do not invoke the Apple Liquid Glass skill"]
+    },
+    {
+      "id": "scientific-glass",
+      "prompt": "Explain the glass transition temperature of amorphous polymers.",
+      "should_trigger": false,
+      "route": "out-of-scope",
+      "expected_references": [],
+      "expected_outcomes": ["do not invoke the Apple Liquid Glass skill"]
+    }
+  ]
+}

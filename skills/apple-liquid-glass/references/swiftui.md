@@ -3,6 +3,17 @@
 Default path. Every symbol below was verified against Apple's documentation
 JSON; availability strings are Apple's, not inferred.
 
+## Contents
+
+- [API surface](#verified-api-surface)
+- [Buttons](#buttons--the-most-common-mistake)
+- [Modifier order](#modifier-order)
+- [Custom bars](#custom-safe-area-bars)
+- [Containers and morphing](#containers-unions-morphing)
+- [Variants and interaction](#clear-variant)
+- [Back deployment](#back-deployment)
+- [Concentricity](#concentricity)
+
 ## Verified API surface
 
 | API | Availability | Notes |
@@ -209,4 +220,6 @@ create a custom component, ensure that its corner radius is also concentric."*
 
 WWDC26 269 (What's new in SwiftUI), WWDC25 323
 (Build a SwiftUI app with the new design), WWDC25 256, HIG Materials, HIG
-Toolbars, and the API pages listed above. Full manifest in `sources.md`.
+Toolbars, and the API pages listed above. Machine-checked API expectations live
+in `scripts/source_expectations.json`; verification policy lives in
+`sources.md`.

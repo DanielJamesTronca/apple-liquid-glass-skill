@@ -3,6 +3,15 @@
 The judgment layer. Load this whenever the real question is *should* this be
 glass, not *how* to write glass.
 
+## Contents
+
+- [The two layers](#the-two-layers)
+- [Walking the tree](#walking-the-tree)
+- [Containers](#when-to-use-a-container-corrected-rule)
+- [Rejecting a request](#rejecting-a-request-well)
+- [Repeated judgment calls](#judgment-calls-that-come-up-repeatedly)
+- [Brand expression](#brand-expression)
+
 ## The two layers
 
 Apple's model, stated in WWDC26 251 (Communicate your brand identity on iOS):
@@ -54,7 +63,8 @@ rich media, the media must stay prominent, and a dimming layer is present.
 **8. Does tint mean something?**
 State, or one primary action. Otherwise no tint.
 
-**9–11.** Deployment target, OS 27 beta deltas, verification plan — see SKILL.md §5.
+After the design gates, route by deployment target and SDK, then name the
+verification plan described in `SKILL.md`.
 
 ## When to use a container (corrected rule)
 

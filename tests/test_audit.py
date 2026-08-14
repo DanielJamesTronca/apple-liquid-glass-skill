@@ -2,13 +2,13 @@
 """
 Test suite for the apple-liquid-glass skill.
 
-Covers the things that can actually break silently:
+Covers the audit and packaging failures that can break silently:
   - the audit script's signal/noise balance against known-good and known-bad code
   - manifest validity (a malformed plugin.json breaks installation)
   - SKILL.md structure and, critically, that every reference file it links exists
     (a broken link silently breaks progressive disclosure)
 
-Run: python3 tests/test_audit.py
+Run: python3 -m unittest discover -s tests -p 'test_*.py' -v
 """
 
 from __future__ import annotations
@@ -25,6 +25,7 @@ SKILL = ROOT / "skills" / "apple-liquid-glass"
 SCRIPTS = SKILL / "scripts"
 FIXTURES = ROOT / "tests" / "fixtures"
 AUDIT = SCRIPTS / "audit_liquid_glass.py"
+SOURCE_CHECK = SCRIPTS / "check_sources.py"
 
 # Leads the bad fixture must surface at medium confidence or above.
 EXPECTED_BAD = {
@@ -105,7 +106,7 @@ class TestAuditSignal(unittest.TestCase):
 class TestScriptsHealthy(unittest.TestCase):
     def test_scripts_compile(self):
         subprocess.run(
-            [sys.executable, "-m", "py_compile", str(AUDIT)],
+            [sys.executable, "-m", "py_compile", str(AUDIT), str(SOURCE_CHECK)],
             check=True,
             capture_output=True,
         )
@@ -141,6 +142,15 @@ class TestManifests(unittest.TestCase):
         self.assertEqual(plugin["version"], codex["version"],
                          "Claude and Codex plugin versions have drifted")
 
+    def test_codex_default_prompts_fit_manifest_contract(self):
+        codex = json.loads((ROOT / ".codex-plugin" / "plugin.json").read_text())
+        prompts = codex["interface"]["defaultPrompt"]
+        self.assertIsInstance(prompts, list)
+        self.assertGreaterEqual(len(prompts), 1)
+        self.assertLessEqual(len(prompts), 3)
+        self.assertTrue(all(isinstance(prompt, str) and len(prompt) <= 128
+                            for prompt in prompts))
+
 class TestSkillStructure(unittest.TestCase):
     def setUp(self):
         self.text = (SKILL / "SKILL.md").read_text()
@@ -161,7 +171,7 @@ class TestSkillStructure(unittest.TestCase):
 
     def test_stays_concise(self):
         lines = len(self.text.splitlines())
-        self.assertLess(lines, 250, f"SKILL.md grew to {lines} lines; move detail to references/")
+        self.assertLess(lines, 160, f"SKILL.md grew to {lines} lines; move detail to references/")
 
     def test_current_bar_guidance_is_present(self):
         swiftui = (SKILL / "references" / "swiftui.md").read_text()

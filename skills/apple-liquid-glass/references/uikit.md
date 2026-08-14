@@ -1,6 +1,16 @@
 # UIKit — Liquid Glass
 
-Load in addition to `swiftui.md` when the project imports UIKit.
+Load for UIKit code. In a mixed SwiftUI/UIKit project, also load `swiftui.md`.
+
+## Contents
+
+- [API surface](#verified-api-surface)
+- [Automatic adoption](#what-is-automatic)
+- [Bars](#bars-ios-27-beta)
+- [Tabs and sidebars](#tabs-and-sidebars-ios-27-beta)
+- [Menus](#menus-ios-27-beta)
+- [Drag and drop](#drag-and-drop-with-apple-intelligence)
+- [Custom controls](#custom-controls)
 
 ## Verified API surface
 
