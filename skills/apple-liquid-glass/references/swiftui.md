@@ -1,7 +1,7 @@
 # SwiftUI — Liquid Glass
 
-Default path. Every symbol below was verified against Apple's documentation
-JSON; availability strings are Apple's, not inferred.
+Load for SwiftUI code. Every symbol below was verified against Apple's
+documentation JSON; availability strings are Apple's, not inferred.
 
 ## Contents
 
